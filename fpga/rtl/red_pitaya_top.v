@@ -228,11 +228,6 @@ assign ps_sys_err   = |(sys_cs & sys_err);
 assign ps_sys_ack   = |(sys_cs & sys_ack);
 
 // unused system bus slave ports
-
-assign sys_rdata[5*32+:32] = 32'h0; 
-assign sys_err  [5       ] =  1'b0;
-assign sys_ack  [5       ] =  1'b1;
-
 assign sys_rdata[6*32+:32] = 32'h0; 
 assign sys_err  [6       ] =  1'b0;
 assign sys_ack  [6       ] =  1'b1;
@@ -315,6 +310,7 @@ BUFG bufg_dac_clk_2p (.O (dac_clk_2p), .I (pll_dac_clk_2p));
 BUFG bufg_ser_clk    (.O (ser_clk   ), .I (pll_ser_clk   ));
 BUFG bufg_pwm_clk    (.O (pwm_clk   ), .I (pll_pwm_clk   ));
 
+
 // ADC reset (active low) 
 always @(posedge adc_clk)
 adc_rstn <=  frstn[0] &  pll_locked;
@@ -326,6 +322,8 @@ dac_rst  <= ~frstn[0] | ~pll_locked;
 // PWM reset (active low)
 always @(posedge pwm_clk)
 pwm_rstn <=  frstn[0] &  pll_locked;
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // ADC IO
@@ -520,6 +518,21 @@ red_pitaya_ams i_ams (
   .sys_rdata       (  sys_rdata[ 4*32+31: 4*32]  ),  // read data
   .sys_err         (  sys_err[4]                 ),  // error indicator
   .sys_ack         (  sys_ack[4]                 )   // acknowledge signal
+);
+
+red_pitaya_clash_bus i_clash_bus (
+    //bus
+  .add_i           (  sys_addr                   ),
+  .data_i          (  sys_wdata                  ),
+  .strobe_i        (  sys_sel                    ),
+  .we_i            (  sys_wen[5]                 ),
+  .re_i            (  sys_ren[5]                 ),
+  // clk and rst
+  .system1000      (  adc_clk                    ),
+  .system1000_rstn (  adc_rstn                   ),
+  .data_o          (  sys_rdata[ 5*32+31: 5*32]  ),
+  .ack_o           (  sys_ack[5]                 ),
+  .err_o           (  sys_err[5]                 )
 );
 
 red_pitaya_pwm pwm [4-1:0] (

@@ -75,6 +75,8 @@ read_verilog                      $path_rtl/red_pitaya_pwm.sv
 read_verilog                      $path_rtl/red_pitaya_scope.v
 read_verilog                      $path_rtl/red_pitaya_top.v
 
+add_files                         $path_rtl/clash
+
 read_xdc                          $path_sdc/red_pitaya.xdc
 
 ################################################################################
