@@ -128,7 +128,8 @@ report_drc               -file    $path_out/post_imp_drc.rpt
 
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 
-write_bitstream -force $path_out/red_pitaya.bit
+write_bitstream -raw_bitfile  -force $path_out/red_pitaya
+
 
 ################################################################################
 # generate system definition

@@ -43,3 +43,5 @@ $(MEMTEST_ELF): $(FPGA_BIT)
 
 $(DEVICE_TREE): $(FPGA_BIT)
 	$(HSI) -source red_pitaya_hsi_dts.tcl
+
+fpga: $(FPGA_BIT)
